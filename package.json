@@ -19,6 +19,7 @@
   },
   "scripts": {
     "dev": "react-scripts start",
+    "initial": "rm -rf node_modules yarn.lock && yarn && yarn dev",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
