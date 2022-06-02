@@ -1,8 +1,6 @@
 # Travel Companion App
 
-###### tags: `Demo`
-
-🔗 [Website View]()
+<!-- 🔗 [Website View]() -->
 
 ## Technologies
 

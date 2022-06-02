@@ -10,9 +10,6 @@
   "[javascriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "files.associations": {
-    "*.js": "javascriptreact"  // Default all JS files format to React
-  },
   "emmet.includeLanguages": {
     "javascript": "javascriptreact"
   }
