@@ -1,16 +1,10 @@
 {
   "editor.formatOnSave": true,
-  "[html]": {
+  // for TypeScript setting
+  "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "[javascript]": {
+  "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  // for React setting
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "emmet.includeLanguages": {
-    "javascript": "javascriptreact"
   }
 }
