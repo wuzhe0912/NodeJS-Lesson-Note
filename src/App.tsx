@@ -1,7 +1,22 @@
 import { Routes, Route } from 'react-router-dom';
+import NavBar from '@/components/NavBar';
+import { routes } from '@/router/routes';
 
 const App = () => {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
+  return (
+    <main>
+      <NavBar />
+      <Routes>
+        {routes.map((route) => (
+          <Route
+            key={route.path}
+            path={route.path}
+            element={<route.element />}
+          />
+        ))}
+      </Routes>
+    </main>
+  );
 };
 
 export default App;
