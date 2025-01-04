@@ -7,11 +7,15 @@ import Profile from '@/pages/Profile';
 export interface IRoute {
   path: string;
   element: ComponentType;
+  isPrivate?: boolean;
+  isPublicOnly?: boolean;
 }
 
 export const routes: IRoute[] = [
-  { path: '/', element: Home },
-  { path: '/login', element: Login },
-  { path: '/register', element: Register },
-  { path: '/profile', element: Profile },
+  // limit logged
+  { path: '/', element: Home, isPrivate: true },
+  { path: '/profile', element: Profile, isPrivate: true },
+  // limit not logged
+  { path: '/login', element: Login, isPublicOnly: true },
+  { path: '/register', element: Register, isPublicOnly: true },
 ];
