@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useAuthStore } from '@/store/useAuthStore';
 import { Link } from 'react-router-dom';
 import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare } from 'lucide-react';
+import { useAuthStore } from '@/store/useAuthStore';
 import AuthImagePattern from '@/components/AuthImagePattern';
 
 const Login = () => {
@@ -20,7 +20,7 @@ const Login = () => {
   return (
     <section className="h-screen grid lg:grid-cols-2">
       {/* Left Side Login Form */}
-      <div className="flex flex-col justify-center items-center p-6 sm:p-12">
+      <article className="flex flex-col justify-center items-center p-6 sm:p-12">
         <div className="w-full max-w-md space-y-8">
           {/* Logo */}
           <div className="text-center mb-8">
@@ -114,7 +114,7 @@ const Login = () => {
             </p>
           </div>
         </div>
-      </div>
+      </article>
       {/* Right Side Image */}
       <AuthImagePattern
         title={'Chatify'}

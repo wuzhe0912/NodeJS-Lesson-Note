@@ -1,7 +1,8 @@
 export type AuthUser = {
-  _id: string;
+  _id?: string;
+  fullName?: string;
   email: string;
-  fullName: string;
+  password?: string;
   profilePicture?: string;
 };
 
@@ -12,4 +13,12 @@ export interface AuthStore {
   isLoggingIn: boolean;
   isUpdatingProfile: boolean;
   checkAuth: () => Promise<void>;
+  register: (userData: AuthUser) => Promise<void>;
+  login: (userData: AuthUser) => Promise<void>;
+  logout: () => Promise<void>;
+}
+
+export interface AuthImagePatternProps {
+  title: string;
+  subtitle: string;
 }
