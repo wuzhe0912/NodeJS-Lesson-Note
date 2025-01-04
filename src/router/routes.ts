@@ -3,6 +3,7 @@ import Home from '@/pages/Home';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import Profile from '@/pages/Profile';
+import Settings from '@/pages/Settings';
 
 export interface IRoute {
   path: string;
@@ -18,4 +19,5 @@ export const routes: IRoute[] = [
   // limit not logged
   { path: '/login', element: Login, isPublicOnly: true },
   { path: '/register', element: Register, isPublicOnly: true },
+  { path: '/settings', element: Settings },
 ];
