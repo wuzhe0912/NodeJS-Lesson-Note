@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
+import { Users } from 'lucide-react';
 import { useChatStore } from '@/store/useChatStore';
 import { useAuthStore } from '@/store/useAuthStore';
 import SidebarSkeleton from '@/components/skeletons/SidebarSkeleton';
-import { Users } from 'lucide-react';
 
 const SideBar = () => {
   const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } =
@@ -18,7 +18,9 @@ const SideBar = () => {
   console.log(1, users);
 
   const filteredUsers = showOnlineOnly
-    ? users.filter((user) => onlineUsers.includes(user._id))
+    ? users.filter((user) =>
+        onlineUsers.some((onlineUser) => onlineUser._id === user._id),
+      )
     : users;
 
   if (isUsersLoading) return <SidebarSkeleton />;
@@ -64,7 +66,9 @@ const SideBar = () => {
                 alt={user.fullName}
                 className="size-12 object-cover rounded-full"
               />
-              {onlineUsers.includes(user._id) && (
+              {onlineUsers.some(
+                (onlineUser) => onlineUser._id === user._id,
+              ) && (
                 <span
                   className="absolute bottom-0 right-0 size-3 bg-green-500 
                   rounded-full ring-2 ring-zinc-900"
@@ -76,7 +80,9 @@ const SideBar = () => {
             <div className="hidden lg:block text-left min-w-0">
               <div className="font-medium truncate">{user.fullName}</div>
               <div className="text-sm text-zinc-400">
-                {onlineUsers.includes(user._id) ? 'Online' : 'Offline'}
+                {onlineUsers.some((onlineUser) => onlineUser._id === user._id)
+                  ? 'Online'
+                  : 'Offline'}
               </div>
             </div>
           </button>

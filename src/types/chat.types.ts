@@ -5,12 +5,23 @@ export interface User {
   profilePicture: string;
 }
 
+export interface Message {
+  _id: string;
+  senderId: string;
+  receiverId: string;
+  message: string;
+  createdAt: Date;
+  updatedAt: Date;
+  image: string;
+  text: string;
+}
+
 export interface ChatStore {
-  messages: string[];
+  messages: Message[];
   users: User[];
   selectedUser: User | null;
   isUsersLoading: boolean;
-  isMessageLoading: boolean;
+  isMessagesLoading: boolean;
   getUsers: () => Promise<void>;
   getMessages: (userId: string) => Promise<void>;
   sendMessage: (message: string) => Promise<void>;

@@ -1,7 +1,10 @@
 import { create } from 'zustand';
 import { axiosInstance } from '@/lib/axios';
 import toast from 'react-hot-toast';
+import { io } from 'socket.io-client';
 import { AuthStore, AuthUser } from '@/types/auth.types';
+
+const BASE_URL = import.meta.env.BASE_URL;
 
 export const useAuthStore = create<AuthStore>((set, get) => ({
   authUser: null,
@@ -10,6 +13,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   isLoggingIn: false,
   isUpdatingProfile: false,
   onlineUsers: [],
+  socket: null,
 
   checkAuth: async () => {
     try {
@@ -58,6 +62,30 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       toast.success('Profile updated successfully');
     } finally {
       set({ isUpdatingProfile: false });
+    }
+  },
+
+  connectSocket: () => {
+    const { authUser } = get();
+    if (!authUser) return;
+
+    const socket = io(BASE_URL, {
+      query: {
+        userId: authUser._id,
+      },
+    });
+    socket.connect();
+
+    set({ socket: socket });
+
+    socket.on('getOnlineUsers', (userIds) => {
+      set({ onlineUsers: userIds });
+    });
+  },
+
+  disconnectSocket: () => {
+    if (get().socket?.connected) {
+      get().socket?.disconnect();
     }
   },
 }));
