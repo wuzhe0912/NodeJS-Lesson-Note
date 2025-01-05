@@ -14,6 +14,7 @@ export interface AuthStore {
   isRegistering: boolean;
   isLoggingIn: boolean;
   isUpdatingProfile: boolean;
+  onlineUsers: AuthUser[];
   checkAuth: () => Promise<void>;
   register: (userData: AuthUser) => Promise<void>;
   login: (userData: AuthUser) => Promise<void>;
