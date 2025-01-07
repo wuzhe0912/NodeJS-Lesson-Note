@@ -16,6 +16,11 @@ export interface Message {
   text: string;
 }
 
+export interface MessageData {
+  text: string;
+  image?: string | null;
+}
+
 export interface ChatStore {
   messages: Message[];
   users: User[];
@@ -24,6 +29,8 @@ export interface ChatStore {
   isMessagesLoading: boolean;
   getUsers: () => Promise<void>;
   getMessages: (userId: string) => Promise<void>;
-  sendMessage: (message: string) => Promise<void>;
+  sendMessage: (message: MessageData) => Promise<void>;
   setSelectedUser: (selectedUser: User | null) => void;
+  subscribeToMessages: () => void;
+  unsubscribeFromMessages: () => void;
 }
