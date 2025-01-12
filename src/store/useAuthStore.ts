@@ -8,6 +8,7 @@ const BASE_URL = import.meta.env.BASE_URL;
 
 export const useAuthStore = create<AuthStore>((set, get) => ({
   authUser: null,
+  token: localStorage.getItem('token') || null,
   isCheckingAuth: true,
   isRegistering: false,
   isLoggingIn: false,
@@ -17,10 +18,17 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
 
   checkAuth: async () => {
     try {
+      const { token } = get();
+      if (!token) {
+        set({ authUser: null, isCheckingAuth: false });
+        return;
+      }
+      // Add Authorization: Bearer token
       const response = await axiosInstance.get('/auth/check');
       set({ authUser: response.data });
     } catch (error) {
-      set({ authUser: null });
+      set({ authUser: null, token: null });
+      localStorage.removeItem('token');
     } finally {
       set({ isCheckingAuth: false });
     }
@@ -30,7 +38,9 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     set({ isRegistering: true });
     try {
       const response = await axiosInstance.post('/auth/register', userData);
-      set({ authUser: response.data });
+      const { token, user } = response.data;
+      set({ authUser: user, token });
+      localStorage.setItem('token', token);
       toast.success('Account created successfully');
     } finally {
       set({ isRegistering: false });
@@ -41,7 +51,9 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     set({ isLoggingIn: true });
     try {
       const response = await axiosInstance.post('/auth/login', userData);
-      set({ authUser: response.data });
+      const { token, user } = response.data;
+      set({ authUser: user, token });
+      localStorage.setItem('token', token);
       toast.success('Login successful');
     } finally {
       set({ isLoggingIn: false });
@@ -50,7 +62,8 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
 
   logout: async () => {
     await axiosInstance.post('/auth/logout');
-    set({ authUser: null });
+    set({ authUser: null, token: null });
+    localStorage.removeItem('token');
     toast.success('Logout successful');
   },
 

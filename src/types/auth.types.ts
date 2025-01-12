@@ -10,6 +10,7 @@ export type AuthUser = {
 
 export interface AuthStore {
   authUser: AuthUser | null;
+  token: string | null;
   isCheckingAuth: boolean;
   isRegistering: boolean;
   isLoggingIn: boolean;
