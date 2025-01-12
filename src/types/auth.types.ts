@@ -1,3 +1,5 @@
+import { Socket } from 'socket.io-client';
+
 export type AuthUser = {
   _id?: string;
   fullName?: string;
@@ -16,12 +18,15 @@ export interface AuthStore {
   isLoggingIn: boolean;
   isUpdatingProfile: boolean;
   onlineUsers: AuthUser[];
-  socket: any;
+  socket: Socket | null;
+
   checkAuth: () => Promise<void>;
   register: (userData: AuthUser) => Promise<void>;
   login: (userData: AuthUser) => Promise<void>;
   logout: () => Promise<void>;
   updateProfile: (userData: AuthUser) => Promise<void>;
+  connectSocket: () => void;
+  disconnectSocket: () => void;
 }
 
 export interface AuthImagePatternProps {

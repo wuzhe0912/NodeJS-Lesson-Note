@@ -26,6 +26,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       // Add Authorization: Bearer token
       const response = await axiosInstance.get('/auth/check');
       set({ authUser: response.data });
+      get().connectSocket();
     } catch (error) {
       set({ authUser: null, token: null });
       localStorage.removeItem('token');
@@ -42,6 +43,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       set({ authUser: user, token });
       localStorage.setItem('token', token);
       toast.success('Account created successfully');
+      get().connectSocket();
     } finally {
       set({ isRegistering: false });
     }
@@ -55,6 +57,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       set({ authUser: user, token });
       localStorage.setItem('token', token);
       toast.success('Login successful');
+      get().connectSocket();
     } finally {
       set({ isLoggingIn: false });
     }
@@ -65,6 +68,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     set({ authUser: null, token: null });
     localStorage.removeItem('token');
     toast.success('Logout successful');
+    get().disconnectSocket();
   },
 
   updateProfile: async (userData: AuthUser) => {
