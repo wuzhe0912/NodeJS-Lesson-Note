@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import { io } from 'socket.io-client';
 import { AuthStore, AuthUser } from '@/types/auth.types';
 
-const BASE_URL = import.meta.env.BASE_URL;
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export const useAuthStore = create<AuthStore>((set, get) => ({
   authUser: null,
@@ -94,7 +94,6 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     socket.connect();
 
     set({ socket: socket });
-
     socket.on('getOnlineUsers', (userIds) => {
       set({ onlineUsers: userIds });
     });

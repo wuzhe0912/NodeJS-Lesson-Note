@@ -15,11 +15,9 @@ const SideBar = () => {
     getUsers();
   }, [getUsers]);
 
-  console.log(1, onlineUsers);
-
   const filteredUsers = showOnlineOnly
     ? users.filter((user) =>
-        onlineUsers.some((onlineUser) => onlineUser._id === user._id),
+        onlineUsers.some((onlineUser) => onlineUser === user._id),
       )
     : users;
 
@@ -44,7 +42,7 @@ const SideBar = () => {
             <span className="text-sm">Show online only</span>
           </label>
           <span className="text-xs text-zinc-500">
-            ({onlineUsers.length - 1} online)
+            ({onlineUsers.length} online)
           </span>
         </div>
       </div>
@@ -66,9 +64,7 @@ const SideBar = () => {
                 alt={user.fullName}
                 className="size-12 object-cover rounded-full"
               />
-              {onlineUsers.some(
-                (onlineUser) => onlineUser._id === user._id,
-              ) && (
+              {onlineUsers.some((onlineUser) => onlineUser === user._id) && (
                 <span
                   className="absolute bottom-0 right-0 size-3 bg-green-500 
                   rounded-full ring-2 ring-zinc-900"
@@ -80,7 +76,7 @@ const SideBar = () => {
             <div className="hidden lg:block text-left min-w-0">
               <div className="font-medium truncate">{user.fullName}</div>
               <div className="text-sm text-zinc-400">
-                {onlineUsers.some((onlineUser) => onlineUser._id === user._id)
+                {onlineUsers.some((onlineUser) => onlineUser === user._id)
                   ? 'Online'
                   : 'Offline'}
               </div>
