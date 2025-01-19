@@ -4,6 +4,7 @@ import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import Profile from '@/pages/Profile';
 import Settings from '@/pages/Settings';
+import NotFound from '@/pages/NotFound';
 
 export interface IRoute {
   path: string;
@@ -20,4 +21,6 @@ export const routes: IRoute[] = [
   { path: '/login', element: Login, isPublicOnly: true },
   { path: '/register', element: Register, isPublicOnly: true },
   { path: '/settings', element: Settings },
+  // 404 page
+  { path: '*', element: NotFound },
 ];

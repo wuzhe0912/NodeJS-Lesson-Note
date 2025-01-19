@@ -28,17 +28,21 @@ const App = () => {
     <main data-theme={theme}>
       <NavBar />
       <Routes>
-        {routes.map(({ path, element: Element, isPrivate, isPublicOnly }) => {
-          let routeElement = <Element />;
-
-          if (isPrivate && !authUser) {
-            routeElement = <Navigate to="/login" />;
-          } else if (isPublicOnly && authUser) {
-            routeElement = <Navigate to="/" />;
-          }
-
-          return <Route key={path} path={path} element={routeElement} />;
-        })}
+        {routes.map(({ path, element: Element, isPrivate, isPublicOnly }) => (
+          <Route
+            key={path}
+            path={path}
+            element={
+              isPrivate && !authUser ? (
+                <Navigate to="/login" replace />
+              ) : isPublicOnly && authUser ? (
+                <Navigate to="/" replace />
+              ) : (
+                <Element />
+              )
+            }
+          />
+        ))}
       </Routes>
       <Toaster />
     </main>
