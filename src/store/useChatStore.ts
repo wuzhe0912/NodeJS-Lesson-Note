@@ -9,6 +9,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   selectedUser: null,
   isUsersLoading: false,
   isMessagesLoading: false,
+  editingMessage: null,
 
   getUsers: async () => {
     set({ isUsersLoading: true });
@@ -61,11 +62,40 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         messages: [...get().messages, newMessage],
       });
     });
+
+    socket.on('messageEdited', (editedMessage: Message) => {
+      const messages = get().messages.map((msg) =>
+        msg._id === editedMessage._id ? editedMessage : msg,
+      );
+      set({ messages });
+    });
   },
 
   unsubscribeFromMessages: () => {
     const socket = useAuthStore.getState().socket;
     if (!socket) return;
     socket.off('newMessage');
+  },
+
+  setEditingMessage: (message) => {
+    set({ editingMessage: message });
+  },
+
+  editMessage: async (messageId, text) => {
+    try {
+      const response = await axiosInstance.put(`/messages/${messageId}`, {
+        text,
+      });
+
+      // 更新本地訊息
+      const messages = get().messages.map((msg) =>
+        msg._id === messageId ? response.data : msg,
+      );
+
+      set({ messages, editingMessage: null });
+    } catch (error) {
+      console.error('Failed to edit message:', error);
+      throw error;
+    }
   },
 }));

@@ -1,13 +1,20 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useChatStore } from '@/store/useChatStore';
 import { Image, Send, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const MessageInput = () => {
+  const { editingMessage, setEditingMessage, editMessage, sendMessage } =
+    useChatStore();
   const [text, setText] = useState('');
   const [imagePreview, setImagePreview] = useState(null);
-  const fileInputRef = useRef(null);
-  const { sendMessage } = useChatStore();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (editingMessage) {
+      setText(editingMessage.text || '');
+    }
+  }, [editingMessage]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -35,24 +42,41 @@ const MessageInput = () => {
     if (!text.trim() && !imagePreview) return;
 
     try {
-      await sendMessage({
-        text: text.trim(),
-        image: imagePreview,
-      });
+      if (editingMessage) {
+        await editMessage(editingMessage._id, text.trim());
+      } else {
+        await sendMessage({
+          text: text.trim(),
+          image: imagePreview,
+        });
+      }
 
-      // Clear form
       setText('');
       setImagePreview(null);
-      if (fileInputRef.current) {
-        (fileInputRef.current as HTMLInputElement).value = '';
-      }
+      setEditingMessage(null);
     } catch (error) {
-      console.error('Failed to send message:', error);
+      console.log('Failed to send/edit message:', error);
     }
   };
 
   return (
     <div className="p-4 w-full">
+      {/* Edit Message Mode */}
+      {editingMessage && (
+        <div className="mb-2 flex items-center justify-between bg-base-200 p-2 rounded-lg">
+          <span className="text-sm">Editing message</span>
+          <button
+            onClick={() => {
+              setEditingMessage(null);
+              setText('');
+            }}
+            className="btn btn-ghost btn-xs"
+          >
+            Cancel
+          </button>
+        </div>
+      )}
+
       {imagePreview && (
         <div className="mb-3 flex items-center gap-2">
           <div className="relative">

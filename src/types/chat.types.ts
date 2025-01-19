@@ -14,6 +14,7 @@ export interface Message {
   updatedAt: Date;
   image: string;
   text: string;
+  isEdited: boolean;
 }
 
 export interface MessageData {
@@ -33,4 +34,7 @@ export interface ChatStore {
   setSelectedUser: (selectedUser: User | null) => void;
   subscribeToMessages: () => void;
   unsubscribeFromMessages: () => void;
+  editMessage: (messageId: string, text: string) => Promise<void>;
+  editingMessage: Message | null;
+  setEditingMessage: (message: Message | null) => void;
 }
