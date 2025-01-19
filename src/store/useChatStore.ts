@@ -69,6 +69,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       );
       set({ messages });
     });
+
+    socket.on('messageDeleted', (deletedMessageId: string) => {
+      const messages = get().messages.filter(
+        (msg) => msg._id !== deletedMessageId,
+      );
+      set({ messages });
+    });
   },
 
   unsubscribeFromMessages: () => {
@@ -87,14 +94,27 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         text,
       });
 
-      // 更新本地訊息
+      // 更新訊息
       const messages = get().messages.map((msg) =>
         msg._id === messageId ? response.data : msg,
       );
 
       set({ messages, editingMessage: null });
     } catch (error) {
-      console.error('Failed to edit message:', error);
+      console.log('Failed to edit message:', error);
+      throw error;
+    }
+  },
+
+  deleteMessage: async (messageId: string) => {
+    try {
+      await axiosInstance.delete(`/messages/${messageId}`);
+
+      // 更新訊息列表
+      const messages = get().messages.filter((msg) => msg._id !== messageId);
+      set({ messages });
+    } catch (error) {
+      console.log('Failed to delete message:', error);
       throw error;
     }
   },

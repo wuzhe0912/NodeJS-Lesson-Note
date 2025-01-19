@@ -1,0 +1,27 @@
+@keyframes thanosSnap {
+  0% {
+    opacity: 1;
+    filter: none;
+    transform: translateX(0) translateY(0) rotate(0) scale(1);
+  }
+
+  10% {
+    opacity: 1;
+    filter: none;
+  }
+
+  50% {
+    transform: translateX(-5px) translateY(-5px) rotate(-5deg) scale(0.95);
+    opacity: 0.9;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(50px) translateY(-50px) rotate(15deg) scale(0.7);
+    filter: blur(4px);
+  }
+}
+
+.animate-delete-message {
+  animation: thanosSnap 0.8s forwards ease-in-out;
+}

@@ -3,7 +3,11 @@ import { useChatStore } from '@/store/useChatStore';
 import { Image, Send, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-const MessageInput = () => {
+interface MessageInputProps {
+  onMessageSent?: () => void;
+}
+
+const MessageInput = ({ onMessageSent }: MessageInputProps) => {
   const { editingMessage, setEditingMessage, editMessage, sendMessage } =
     useChatStore();
   const [text, setText] = useState('');
@@ -54,6 +58,7 @@ const MessageInput = () => {
       setText('');
       setImagePreview(null);
       setEditingMessage(null);
+      onMessageSent?.();
     } catch (error) {
       console.log('Failed to send/edit message:', error);
     }

@@ -37,4 +37,5 @@ export interface ChatStore {
   editMessage: (messageId: string, text: string) => Promise<void>;
   editingMessage: Message | null;
   setEditingMessage: (message: Message | null) => void;
+  deleteMessage: (messageId: string) => Promise<void>;
 }
