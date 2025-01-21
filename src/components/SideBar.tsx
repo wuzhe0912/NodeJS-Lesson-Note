@@ -47,6 +47,7 @@ const SideBar = () => {
         </div>
       </div>
 
+      {/* User list */}
       <div className="overflow-y-auto w-full py-3">
         {filteredUsers.map((user) => (
           <button
@@ -87,6 +88,14 @@ const SideBar = () => {
         {filteredUsers.length === 0 && (
           <div className="text-center text-zinc-500 py-4">No online users</div>
         )}
+      </div>
+
+      {/* Version Info */}
+      <div className="mt-auto p-4 text-xs text-gray-500 border-t border-gray-200 dark:border-gray-700">
+        <p>Version {import.meta.env.VITE_APP_VERSION}</p>
+        <p className="text-xs opacity-50">
+          Build: {import.meta.env.VITE_APP_BUILD_TIME}
+        </p>
       </div>
     </aside>
   );
