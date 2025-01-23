@@ -17,6 +17,8 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const isOwnMessage = message.senderId === authUser?._id;
+  // 只有發送訊息這一方才顯示已讀的提示
+  const isRead = message.status === 'read';
 
   const handleDelete = async () => {
     try {
@@ -49,6 +51,11 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
           />
         )}
       </div>
+
+      {/* 已讀的提示 */}
+      {isOwnMessage && (
+        <div className="text-xs mt-1">{isRead ? 'Read' : 'Unread'}</div>
+      )}
 
       {/* 操作訊息 */}
       {isOwnMessage && (

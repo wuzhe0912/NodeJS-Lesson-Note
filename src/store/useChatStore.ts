@@ -76,6 +76,22 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       );
       set({ messages });
     });
+
+    // 監聽 messageRead 事件
+    socket.on(
+      'messageRead',
+      (payload: { messageId: string; readBy: any[] }) => {
+        // 前端若需要更新某則訊息的 readBy
+        const { messageId, readBy } = payload;
+        const updatedMessages = get().messages.map((msg) => {
+          if (msg._id === messageId) {
+            return { ...msg, readBy, status: 'read' };
+          }
+          return msg;
+        });
+        set({ messages: updatedMessages });
+      },
+    );
   },
 
   unsubscribeFromMessages: () => {
@@ -115,6 +131,28 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       set({ messages });
     } catch (error) {
       console.log('Failed to delete message:', error);
+      throw error;
+    }
+  },
+
+  // 標記訊息為已讀
+  markMessageAsRead: async (messageId: string) => {
+    try {
+      const response = await axiosInstance.put(
+        `/messages/${messageId}/markAsRead`,
+      );
+
+      // 後端回傳更新後的 message
+      const updatedMessage = response.data.data as Message;
+
+      // 更新本地 state 裡的 messages
+      const newMessages = get().messages.map((msg) =>
+        msg._id === updatedMessage._id ? updatedMessage : msg,
+      );
+
+      set({ messages: newMessages });
+    } catch (error) {
+      console.error('Failed to mark message as read:', error);
       throw error;
     }
   },

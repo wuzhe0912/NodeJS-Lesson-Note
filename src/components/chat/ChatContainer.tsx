@@ -66,6 +66,25 @@ const ChatContainer = () => {
     }
   }, [messages, isMessagesLoading]);
 
+  useEffect(() => {
+    if (!isMessagesLoading && messages.length > 0 && selectedUser) {
+      const { markMessageAsRead } = useChatStore.getState();
+      const myId = authUser?._id;
+
+      // 找出「尚未讀取」的訊息
+      const unreadMessages = messages.filter(
+        (msg) =>
+          msg.receiverId === myId &&
+          !msg.readBy?.some((r) => r.userId === myId),
+      );
+
+      // 逐一標記為已讀 (未來可以考慮用批次 API)
+      unreadMessages.forEach((msg) => {
+        markMessageAsRead(msg._id);
+      });
+    }
+  }, [messages, isMessagesLoading, selectedUser]);
+
   if (!selectedUser) {
     return (
       <div className="flex-1 flex items-center justify-center bg-base-200/50">

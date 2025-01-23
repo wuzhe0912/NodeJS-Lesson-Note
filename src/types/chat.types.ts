@@ -15,6 +15,11 @@ export interface Message {
   image: string;
   text: string;
   isEdited: boolean;
+  status?: 'sent' | 'delivered' | 'read';
+  readBy?: {
+    userId: string;
+    readAt: Date;
+  }[];
 }
 
 export interface MessageData {
@@ -38,4 +43,5 @@ export interface ChatStore {
   editingMessage: Message | null;
   setEditingMessage: (message: Message | null) => void;
   deleteMessage: (messageId: string) => Promise<void>;
+  markMessageAsRead: (messageId: string) => Promise<void>;
 }
