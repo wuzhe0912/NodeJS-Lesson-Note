@@ -10,6 +10,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   isUsersLoading: false,
   isMessagesLoading: false,
   editingMessage: null,
+  unreadCounts: {},
 
   getUsers: async () => {
     set({ isUsersLoading: true });
@@ -53,10 +54,23 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const socket = useAuthStore.getState().socket;
     if (!socket) return;
 
+    const { authUser } = useAuthStore.getState();
+
     socket.on('newMessage', (newMessage: Message) => {
       const isMessageSentFromSelectedUser =
         newMessage.senderId === selectedUser._id;
       if (!isMessageSentFromSelectedUser) return;
+
+      // 更新未讀數量
+      if (newMessage.receiverId === authUser?._id) {
+        set((state) => ({
+          unreadCounts: {
+            ...state.unreadCounts,
+            [newMessage.senderId]:
+              (state.unreadCounts[newMessage.senderId] || 0) + 1,
+          },
+        }));
+      }
 
       set({
         messages: [...get().messages, newMessage],
@@ -152,8 +166,28 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
       set({ messages: newMessages });
     } catch (error) {
-      console.error('Failed to mark message as read:', error);
+      console.log('Failed to mark message as read:', error);
       throw error;
     }
+  },
+
+  getUnreadCounts: async () => {
+    try {
+      const response = await axiosInstance.get('/messages/unreadCounts');
+      const counts = response.data.reduce(
+        (acc: Record<string, number>, curr: { _id: string; count: number }) => {
+          acc[curr._id] = curr.count;
+          return acc;
+        },
+        {},
+      );
+      set({ unreadCounts: counts });
+    } catch (error) {
+      console.log('Failed to get unread counts:', error);
+    }
+  },
+
+  getUnreadCountForUser: (userId: string) => {
+    return get().unreadCounts[userId] || 0;
   },
 }));

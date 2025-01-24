@@ -3,7 +3,7 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { useChatStore } from '@/store/useChatStore';
 import { Message } from '@/types/chat.types';
 import { formatMessageTime } from '@/lib/utils';
-import { Edit2, Trash2, MoreVertical } from 'lucide-react';
+import { Edit2, Trash2, MoreVertical, Check, CheckCheck } from 'lucide-react';
 import toast from 'react-hot-toast';
 import '@/styles/animation.scss';
 
@@ -16,15 +16,30 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
   const { setEditingMessage, deleteMessage } = useChatStore();
   const [isDeleting, setIsDeleting] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+
   const isOwnMessage = message.senderId === authUser?._id;
-  // 只有發送訊息這一方才顯示已讀的提示
-  const isRead = message.status === 'read';
 
   const handleDelete = async () => {
     try {
       setIsDeleting(true);
     } catch (error) {
       toast.error('Failed to delete message');
+    }
+  };
+
+  // 判斷訊息狀態以顯示對應的 icon（單勾/雙勾/雙勾上色）
+  const renderStatusIcon = () => {
+    if (!isOwnMessage) return null;
+
+    switch (message.status) {
+      case 'sent':
+        return <Check size={16} className="text-gray-400" />;
+      case 'delivered':
+        return <CheckCheck size={16} className="text-gray-400" />;
+      case 'read':
+        return <CheckCheck size={16} className="text-blue-500" />;
+      default:
+        return null;
     }
   };
 
@@ -52,12 +67,7 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
         )}
       </div>
 
-      {/* 已讀的提示 */}
-      {isOwnMessage && (
-        <div className="text-xs mt-1">{isRead ? 'Read' : 'Unread'}</div>
-      )}
-
-      {/* 操作訊息 */}
+      {/* 操作按鈕 */}
       {isOwnMessage && (
         <div
           className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 
@@ -105,10 +115,14 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
         </div>
       )}
 
-      {/* 訊息資訊 */}
-      <div className="flex items-center gap-1 mt-1 text-xs opacity-50">
+      {/* 訊息時間、已編輯、狀態等資訊 */}
+      <div className="flex items-center gap-1 mt-1 text-xs opacity-60">
+        {/* 時間 */}
         <time>{formatMessageTime(message.createdAt)}</time>
+        {/* 已編輯標記 */}
         {message.isEdited && <span>(edited)</span>}
+        {/* 右側狀態 icon */}
+        {renderStatusIcon()}
       </div>
     </div>
   );

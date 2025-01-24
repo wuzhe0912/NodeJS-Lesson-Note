@@ -43,4 +43,7 @@ export interface ChatStore {
   setEditingMessage: (message: Message | null) => void;
   deleteMessage: (messageId: string) => Promise<void>;
   markMessageAsRead: (messageId: string) => Promise<void>;
+  unreadCounts: Record<string, number>;
+  getUnreadCountForUser: (userId: string) => number;
+  getUnreadCounts: () => Promise<void>;
 }
