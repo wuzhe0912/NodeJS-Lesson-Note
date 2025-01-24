@@ -85,7 +85,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         const { messageId, readBy } = payload;
         const updatedMessages = get().messages.map((msg) => {
           if (msg._id === messageId) {
-            return { ...msg, readBy, status: 'read' };
+            return { ...msg, readBy, status: 'read' as const };
           }
           return msg;
         });
