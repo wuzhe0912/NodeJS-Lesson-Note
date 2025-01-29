@@ -87,6 +87,18 @@ const SideBar = () => {
                     rounded-full ring-2 ring-zinc-900"
                   />
                 )}
+                {unreadCount > 0 && (
+                  <span
+                    className="
+                      absolute -top-1 -right-1
+                      size-5 flex items-center justify-center
+                      text-xs font-bold text-white bg-red-500 
+                      rounded-full
+                    "
+                  >
+                    {unreadCount}
+                  </span>
+                )}
               </div>
 
               {/* User info (only visible on larger screens) */}
@@ -96,19 +108,6 @@ const SideBar = () => {
                   {isOnline ? 'Online' : 'Offline'}
                 </div>
               </div>
-
-              {/* 未讀數量 Badge（只在 unreadCount > 0 時顯示） */}
-              {unreadCount > 0 && (
-                <span
-                  className="
-                    text-xs font-bold text-white bg-red-500 
-                    px-2 py-1 rounded-full
-                    hidden lg:inline-block
-                  "
-                >
-                  {unreadCount}
-                </span>
-              )}
             </button>
           );
         })}
