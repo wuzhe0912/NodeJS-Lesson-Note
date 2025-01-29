@@ -112,6 +112,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     const socket = useAuthStore.getState().socket;
     if (!socket) return;
     socket.off('newMessage');
+    socket.off('messageEdited');
+    socket.off('messageDeleted');
+    socket.off('messageRead');
   },
 
   setEditingMessage: (message) => {
