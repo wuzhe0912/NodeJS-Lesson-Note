@@ -17,7 +17,7 @@ export interface AuthStore {
   isRegistering: boolean;
   isLoggingIn: boolean;
   isUpdatingProfile: boolean;
-  onlineUsers: AuthUser[];
+  onlineUsers: string[];
   socket: Socket | null;
 
   checkAuth: () => Promise<void>;
