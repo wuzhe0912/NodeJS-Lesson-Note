@@ -26,6 +26,33 @@ export interface MessageData {
   image?: string | null;
 }
 
+export interface VersionInfoType {
+  version: string;
+  buildTime: string;
+}
+
+export interface ContactItemType {
+  user: User;
+  isSelected: boolean;
+  isOnline: boolean;
+  unreadCount: number;
+  onSelect: (user: User) => void;
+}
+
+export interface ContactListType {
+  users: User[];
+  selectedUser?: User | null;
+  onlineUsers: string[];
+  getUnreadCountForUser: (userId: string) => number;
+  onSelectUser: (user: User) => void;
+}
+
+export interface SideBarHeaderType {
+  showOnlineOnly: boolean;
+  onlineUsersCount: number;
+  onToggleOnlineOnly: (show: boolean) => void;
+}
+
 export interface ChatStore {
   messages: Message[];
   users: User[];

@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { useChatStore } from '@/store/useChatStore';
 import { useAuthStore } from '@/store/useAuthStore';
-import ChatHeader from './ChatHeader';
-import MessageInput from '@/components/chat/MessageInput';
-import MessageSkeleton from '@/components/skeletons/MessageSkeleton';
-import MessageBubble from '@/components/chat/MessageBubble';
+import ChatHeader from '@/components/Chat/ChatHeader';
+import MessageInput from '@/components/Chat/MessageInput';
+import MessageSkeleton from '@/components/Skeletons/MessageSkeleton';
+import MessageBubble from '@/components/Chat/MessageBubble';
 
 const ChatContainer = () => {
   const {
