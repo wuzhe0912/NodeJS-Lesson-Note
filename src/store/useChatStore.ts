@@ -45,36 +45,49 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
   setSelectedUser: (selectedUser: User | null) => {
     set({ selectedUser });
+
+    if (selectedUser) {
+      set((state) => ({
+        unreadCounts: {
+          ...state.unreadCounts,
+          [selectedUser._id]: 0,
+        },
+      }));
+    }
   },
 
   subscribeToMessages: () => {
-    const { selectedUser } = get();
-    if (!selectedUser) return;
-
     const socket = useAuthStore.getState().socket;
     if (!socket) return;
 
     const { authUser } = useAuthStore.getState();
+    const { selectedUser } = get();
 
     socket.on('newMessage', (newMessage: Message) => {
-      const isMessageSentFromSelectedUser =
-        newMessage.senderId === selectedUser._id;
-      if (!isMessageSentFromSelectedUser) return;
-
-      // 更新未讀數量
+      // 1. if message is sent to me, update unread counts
       if (newMessage.receiverId === authUser?._id) {
-        set((state) => ({
-          unreadCounts: {
-            ...state.unreadCounts,
-            [newMessage.senderId]:
-              (state.unreadCounts[newMessage.senderId] || 0) + 1,
-          },
-        }));
+        // if message is not for current chat, update unread counts
+        if (newMessage.senderId !== selectedUser?._id) {
+          set((state) => ({
+            unreadCounts: {
+              ...state.unreadCounts,
+              [newMessage.senderId]:
+                (state.unreadCounts[newMessage.senderId] || 0) + 1,
+            },
+          }));
+        }
       }
 
-      set({
-        messages: [...get().messages, newMessage],
-      });
+      // 2. if message is for current chat, update messages list
+      const isMessageForCurrentChat =
+        newMessage.senderId === selectedUser?._id ||
+        newMessage.receiverId === selectedUser?._id;
+
+      if (isMessageForCurrentChat) {
+        set((state) => ({
+          messages: [...state.messages, newMessage],
+        }));
+      }
     });
 
     socket.on('messageEdited', (editedMessage: Message) => {
@@ -91,30 +104,39 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       set({ messages });
     });
 
-    // 監聽 messageRead 事件
+    // listen to messageRead event
     socket.on(
       'messageRead',
       (payload: { messageId: string; readBy: any[] }) => {
-        // 前端若需要更新某則訊息的 readBy
         const { messageId, readBy } = payload;
+
+        // update message status
         const updatedMessages = get().messages.map((msg) => {
           if (msg._id === messageId) {
             return { ...msg, readBy, status: 'read' as const };
           }
           return msg;
         });
+
         set({ messages: updatedMessages });
       },
     );
+
+    // Clean function
+    return () => {
+      socket.off('newMessage');
+      socket.off('messageRead');
+    };
   },
 
   unsubscribeFromMessages: () => {
     const socket = useAuthStore.getState().socket;
     if (!socket) return;
+
     socket.off('newMessage');
+    socket.off('messageRead');
     socket.off('messageEdited');
     socket.off('messageDeleted');
-    socket.off('messageRead');
   },
 
   setEditingMessage: (message) => {
@@ -127,7 +149,6 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         text,
       });
 
-      // 更新訊息
       const messages = get().messages.map((msg) =>
         msg._id === messageId ? response.data : msg,
       );
@@ -152,22 +173,28 @@ export const useChatStore = create<ChatStore>((set, get) => ({
     }
   },
 
-  // 標記訊息為已讀
+  // mark message as read
   markMessageAsRead: async (messageId: string) => {
     try {
       const response = await axiosInstance.put(
         `/messages/${messageId}/markAsRead`,
       );
-
-      // 後端回傳更新後的 message
       const updatedMessage = response.data.data as Message;
 
-      // 更新本地 state 裡的 messages
+      // update state 裡的 messages
       const newMessages = get().messages.map((msg) =>
         msg._id === updatedMessage._id ? updatedMessage : msg,
       );
 
-      set({ messages: newMessages });
+      // update unread counts
+      const senderId = updatedMessage.senderId;
+      set((state) => ({
+        messages: newMessages,
+        unreadCounts: {
+          ...state.unreadCounts,
+          [senderId]: Math.max(0, (state.unreadCounts[senderId] || 0) - 1),
+        },
+      }));
     } catch (error) {
       console.log('Failed to mark message as read:', error);
       throw error;
