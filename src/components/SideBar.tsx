@@ -51,7 +51,7 @@ const SideBar = () => {
             <span className="text-sm">Show online only</span>
           </label>
           <span className="text-xs text-zinc-500">
-            ({onlineUsers.length} online)
+            ({onlineUsers.length - 1} online)
           </span>
         </div>
       </div>
@@ -87,13 +87,14 @@ const SideBar = () => {
                     rounded-full ring-2 ring-zinc-900"
                   />
                 )}
+                {/* Mobile unread count badge */}
                 {unreadCount > 0 && (
                   <span
                     className="
                       absolute -top-1 -right-1
                       size-5 flex items-center justify-center
                       text-xs font-bold text-white bg-red-500 
-                      rounded-full
+                      rounded-full lg:hidden
                     "
                   >
                     {unreadCount}
@@ -104,10 +105,30 @@ const SideBar = () => {
               {/* User info (only visible on larger screens) */}
               <div className="flex-1 hidden lg:block text-left min-w-0">
                 <div className="font-medium truncate">{user.fullName}</div>
-                <div className="text-sm text-zinc-400">
-                  {isOnline ? 'Online' : 'Offline'}
+                <div className="text-sm flex items-center gap-1">
+                  {isOnline ? (
+                    <span className="text-green-500 flex items-center gap-1">
+                      Online
+                    </span>
+                  ) : (
+                    <span className="text-zinc-500">Offline</span>
+                  )}
                 </div>
               </div>
+
+              {/* Desktop unread count badge */}
+              {unreadCount > 0 && (
+                <span
+                  className="
+                    text-xs font-bold text-white bg-red-500 
+                    px-2 py-1 rounded-full
+                    hidden lg:inline-flex items-center
+                    ml-2
+                  "
+                >
+                  {unreadCount}
+                </span>
+              )}
             </button>
           );
         })}
@@ -118,7 +139,7 @@ const SideBar = () => {
       </div>
 
       {/* Version Info */}
-      <div className="mt-auto p-4 text-xs text-gray-500 border-t border-gray-200 dark:border-gray-700">
+      <div className="mt-auto p-2 text-xs text-gray-500 border-t border-gray-200 dark:border-gray-700">
         <p>Version {import.meta.env.VITE_APP_VERSION}</p>
         <p className="text-xs opacity-50">
           Build: {import.meta.env.VITE_APP_BUILD_TIME}
