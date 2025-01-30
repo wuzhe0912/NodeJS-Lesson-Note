@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useChatStore } from '@/store/useChatStore';
 import { useAuthStore } from '@/store/useAuthStore';
-import SidebarSkeleton from '@/components/Skeletons/SidebarSkeleton';
+import SidebarSkeleton from '@/components/Skeletons_temp/SidebarSkeleton';
 import SideBarHeader from './SideBarHeader';
 import ContactList from '@/components/Contact/ContactList';
 import VersionInfo from './VersionInfo';
