@@ -8,11 +8,13 @@ export interface User {
 export interface Message {
   _id: string;
   senderId: string;
-  receiverId: string;
+  receiverId?: string;
+  groupId?: string;
+  chatType: 'private' | 'group';
+  text: string;
+  image?: string;
   createdAt: Date;
   updatedAt: Date;
-  image: string;
-  text: string;
   isEdited: boolean;
   status?: 'sent' | 'delivered' | 'read';
   readBy?: {
