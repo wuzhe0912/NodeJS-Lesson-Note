@@ -11,7 +11,7 @@ const ContactItem = ({
     <button
       onClick={() => onSelect(user)}
       className={`
-        w-full px-3 py-2 flex items-center gap-3
+        w-full lg:px-3 py-2 flex items-center gap-3
         hover:bg-base-300 transition-colors relative
         ${isSelected ? 'bg-base-300 ring-1 ring-base-300' : ''}
       `}
