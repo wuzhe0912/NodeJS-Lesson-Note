@@ -1,5 +1,4 @@
 import { Group } from '@/types/group.types';
-import { Users } from 'lucide-react';
 
 interface GroupItemProps {
   group: Group;
