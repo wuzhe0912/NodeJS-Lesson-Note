@@ -4,11 +4,10 @@ import { Users } from 'lucide-react';
 interface GroupItemProps {
   group: Group;
   isSelected: boolean;
-  unreadCount: number;
   onSelect: (group: Group) => void;
 }
 
-const GroupItem = ({ group, isSelected, unreadCount, onSelect }: GroupItemProps) => {
+const GroupItem = ({ group, isSelected, onSelect }: GroupItemProps) => {
   return (
     <button
       onClick={() => onSelect(group)}
@@ -18,17 +17,10 @@ const GroupItem = ({ group, isSelected, unreadCount, onSelect }: GroupItemProps)
       {/* Group Avatar */}
       <div className="relative">
         <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-          <Users className="w-5 h-5 text-primary" />
-        </div>
-        {/* Unread Badge */}
-        {unreadCount > 0 && (
-          <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-primary 
-            flex items-center justify-center">
-            <span className="text-xs text-primary-content font-medium">
-              {unreadCount > 99 ? '99+' : unreadCount}
-            </span>
+          <div className="text-primary font-medium flex items-center justify-center w-full h-full">
+            {group.name.charAt(0)}
           </div>
-        )}
+        </div>
       </div>
 
       {/* Group Info */}
@@ -42,4 +34,4 @@ const GroupItem = ({ group, isSelected, unreadCount, onSelect }: GroupItemProps)
   );
 };
 
-export default GroupItem; 
+export default GroupItem;

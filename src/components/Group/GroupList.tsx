@@ -55,7 +55,6 @@ const GroupList = () => {
           key={group._id}
           group={group}
           isSelected={selectedGroup?._id === group._id}
-          unreadCount={group.unreadCount || 0}
           onSelect={setSelectedGroup}
         />
       ))}
@@ -63,4 +62,4 @@ const GroupList = () => {
   );
 };
 
-export default GroupList; 
+export default GroupList;

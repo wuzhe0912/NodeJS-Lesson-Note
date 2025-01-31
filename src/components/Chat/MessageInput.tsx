@@ -1,15 +1,19 @@
 import { useRef, useState, useEffect } from 'react';
 import { useChatStore } from '@/store/useChatStore';
+import { useGroupStore } from '@/store/useGroupStore';
 import { Image, Send, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface MessageInputProps {
   onMessageSent?: () => void;
+  isGroupChat?: boolean;
+  groupId?: string;
 }
 
-const MessageInput = ({ onMessageSent }: MessageInputProps) => {
+const MessageInput = ({ onMessageSent, isGroupChat, groupId }: MessageInputProps) => {
   const { editingMessage, setEditingMessage, editMessage, sendMessage } =
     useChatStore();
+  const { sendGroupMessage } = useGroupStore();
   const [text, setText] = useState('');
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -49,10 +53,16 @@ const MessageInput = ({ onMessageSent }: MessageInputProps) => {
       if (editingMessage) {
         await editMessage(editingMessage._id, text.trim());
       } else {
-        await sendMessage({
+        const messageData = {
           text: text.trim(),
           image: imagePreview,
-        });
+        };
+        
+        if (isGroupChat && groupId) {
+          await sendGroupMessage(groupId, messageData);
+        } else {
+          await sendMessage(messageData);
+        }
       }
 
       setText('');

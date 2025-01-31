@@ -55,7 +55,7 @@ export const useGroupStore = create<GroupStore>((set, get) => ({
     try {
       const response = await axiosInstance.post(`/groups/${groupId}/message`, message);
       set((state) => ({
-        groupMessages: [...state.groupMessages, response.data.message],
+        groupMessages: [...state.groupMessages, response.data.data],
       }));
     } catch (error) {
       console.error('Failed to send group message:', error);
