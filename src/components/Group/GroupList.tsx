@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useGroupStore } from '@/store/useGroupStore';
-import GroupItem from './GroupItem';
+import GroupItem from '@/components/Group/GroupItem';
 
 const GroupList = () => {
   const {

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { UserPlus, UserCheck } from 'lucide-react';
-import CreateGroupModal from '../Group/CreateGroupModal';
+import CreateGroupModal from '@/components/Group/CreateGroupModal';
 
 interface SideBarHeaderProps {
   showOnlineOnly: boolean;

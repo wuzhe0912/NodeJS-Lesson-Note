@@ -3,14 +3,20 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { useChatStore } from '@/store/useChatStore';
 import { useGroupStore } from '@/store/useGroupStore';
 import { MessageSquare, Users } from 'lucide-react';
-import SideBarHeader from './SideBarHeader';
+import SideBarHeader from '@/components/SideBar/SideBarHeader';
 import ContactList from '@/components/Contact/ContactList';
 import GroupList from '@/components/Group/GroupList';
-import VersionInfo from './VersionInfo';
+import VersionInfo from '@/components/SideBar/VersionInfo';
 
 const SideBar = () => {
   const [activeTab, setActiveTab] = useState<'chats' | 'groups'>('chats');
-  const { users, selectedUser, setSelectedUser, getUnreadCountForUser, getUsers } = useChatStore();
+  const {
+    users,
+    selectedUser,
+    setSelectedUser,
+    getUnreadCountForUser,
+    getUsers,
+  } = useChatStore();
   const { setSelectedGroup } = useGroupStore();
   const { onlineUsers } = useAuthStore();
   const [showOnlineOnly, setShowOnlineOnly] = useState(false);
@@ -47,9 +53,11 @@ const SideBar = () => {
           onClick={() => handleTabChange('chats')}
           className={`flex-1 py-3 px-2 flex items-center justify-center gap-2
             transition-colors hover:bg-base-200
-            ${activeTab === 'chats' 
-              ? 'border-b-2 border-primary text-primary bg-base-200/50' 
-              : 'text-base-content/70'}`}
+            ${
+              activeTab === 'chats'
+                ? 'border-b-2 border-primary text-primary bg-base-200/50'
+                : 'text-base-content/70'
+            }`}
         >
           <MessageSquare size={18} />
           <span className="hidden lg:inline font-medium">Chats</span>
@@ -58,9 +66,11 @@ const SideBar = () => {
           onClick={() => handleTabChange('groups')}
           className={`flex-1 py-3 px-2 flex items-center justify-center gap-2
             transition-colors hover:bg-base-200
-            ${activeTab === 'groups' 
-              ? 'border-b-2 border-primary text-primary bg-base-200/50' 
-              : 'text-base-content/70'}`}
+            ${
+              activeTab === 'groups'
+                ? 'border-b-2 border-primary text-primary bg-base-200/50'
+                : 'text-base-content/70'
+            }`}
         >
           <Users size={18} />
           <span className="hidden lg:inline font-medium">Groups</span>

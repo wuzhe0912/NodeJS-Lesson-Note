@@ -1,5 +1,5 @@
 import { User } from '@/types/chat.types';
-import ContactItem from './ContactItem';
+import ContactItem from '@/components/Contact/ContactItem';
 
 interface ContactListProps {
   users: User[];
@@ -19,14 +19,12 @@ const ContactList = ({
   onSelectUser,
 }: ContactListProps) => {
   const filteredUsers = showOnlineOnly
-    ? users.filter(user => onlineUsers.includes(user._id))
+    ? users.filter((user) => onlineUsers.includes(user._id))
     : users;
 
   if (users.length === 0) {
     return (
-      <div className="p-4 text-center text-base-content/60">
-        No users found
-      </div>
+      <div className="p-4 text-center text-base-content/60">No users found</div>
     );
   }
 
